@@ -1,0 +1,15 @@
+version: '3.7'
+services:
+  authorization-service:
+    build:
+      context: ""
+    restart: always
+    container_name: authorization-service
+    command: sh ./run_server.sh
+    ports:
+      - 8080:8080
+    networks:
+      - mihailo_network
+networks:
+  mihailo_network:
+    external: true
