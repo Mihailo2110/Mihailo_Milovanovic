@@ -129,7 +129,7 @@ class Login:
                     status_code=400,
                     content="Password not correct!"
                 )
-            email = getattr(user, "email")
+            # email = getattr(user, "email")
             Login.set_token(email)
             return JSONResponse(
                 status_code=200,
@@ -191,17 +191,17 @@ class Login:
                 )
                 return JSONResponse(
                     status_code=200,
-                    content={"message": "Successfully logged in"}
+                    content="Successfully logged in"
                 )
             else:
                 if delta_seconds >= validation_time_seconds:
                     return JSONResponse(
                         status_code=400,
-                        content={"message": "Token expired"}
+                        content="Token expired"
                     )
                 return JSONResponse(
                     status_code=400,
-                    content={"message": "Token is not correct"}
+                    content="Token is not correct"
                 )
         except Exception as e:
             return str(e)
@@ -209,7 +209,9 @@ class Login:
     @staticmethod
     def change_password(change_pass):
         try:
-            if not check_email(email=change_pass.email):
+            if not check_email(
+                    email=change_pass.email
+            ):
                 return JSONResponse(
                     status_code=400,
                     content=f"Account with email: {change_pass.email} is not registered!"
