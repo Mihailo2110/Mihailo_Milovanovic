@@ -22,13 +22,13 @@ class UserCRUD:
             if not user:
                 return JSONResponse(
                     status_code=400,
-                    content=f"Account with email: {email} is not registered!"
+                    content={"message":f"Account with email: {email} is not registered!"}
                 )
             return user
         except Exception as e:
             return JSONResponse(
                 status_code=500,
-                content=str(e)
+                content={"message":str(e)}
             )
 
     @staticmethod
@@ -39,13 +39,13 @@ class UserCRUD:
             if not users:
                 return JSONResponse(
                     status_code=400,
-                    content="There are no accounts in database!"
+                    content={"message": "There are no accounts in database!"}
                 )
             return users
         except Exception as e:
             return JSONResponse(
                 status_code=500,
-                content=str(e)
+                content={"message":str(e)}
             )
 
     @staticmethod
@@ -56,12 +56,12 @@ class UserCRUD:
             ):
                 return JSONResponse(
                     status_code=200,
-                    content="Account created successfully!"
+                    content={"message":"Account created successfully!"}
                 )
         except Exception as e:
             return JSONResponse(
                 status_code=400,
-                content=f"There already exists an account registered with this email!"
+                content={"message":f"There already exists an account registered with this email!"}
             )
 
     @staticmethod
@@ -70,7 +70,7 @@ class UserCRUD:
             if not check_email(email=email):
                 return JSONResponse(
                     status_code=400,
-                    content=f"Account with email: {email} is not registered!"
+                    content={"message":f"Account with email: {email} is not registered!"}
                 )
             if UserDB().update_user(
                     email=email,
@@ -78,12 +78,12 @@ class UserCRUD:
             ):
                 return JSONResponse(
                     status_code=200,
-                    content=f"Successfully updated account!"
+                    content={"message":f"Successfully updated account!"}
                 )
         except Exception as e:
             return JSONResponse(
                 status_code=500,
-                content=str(e)
+                content={"message":str(e)}
             )
 
     @staticmethod
@@ -92,19 +92,19 @@ class UserCRUD:
             if not check_email(email=email):
                 return JSONResponse(
                     status_code=400,
-                    content=f"Account with email: {email} is not registered!"
+                    content={"message":f"Account with email: {email} is not registered!"}
                 )
             if UserDB().delete(
                     email=email
             ):
                 return JSONResponse(
                     status_code=200,
-                    content="Account deleted successfully!"
+                    content={"message":"Account deleted successfully!"}
                 )
         except Exception as e:
             return JSONResponse(
                 status_code=500,
-                content=str(e)
+                content={"message":str(e)}
             )
 
 
@@ -119,7 +119,7 @@ class Login:
             if not check_email(email=email):
                 return JSONResponse(
                     status_code=400,
-                    content="E-mail not valid"
+                    content={"message":"E-mail not valid"}
                 )
             user = UserDB().get_user(
                 email=email
@@ -127,13 +127,13 @@ class Login:
             if password != getattr(user, "password"):
                 return JSONResponse(
                     status_code=400,
-                    content="Password not correct!"
+                    content={"message":"Password not correct!"}
                 )
             # email = getattr(user, "email")
             Login.set_token(email)
             return JSONResponse(
                 status_code=200,
-                content=f"Login successful, token sent on {email}"
+                content={"message":f"Login successful, token sent on {email}"}
             )
         except Exception as e:
             return str(e)
@@ -181,7 +181,7 @@ class Login:
             if not current_token:
                 return JSONResponse(
                     status_code=404,
-                    content="Token doesn't exist!"
+                    content={"message":"Token doesn't exist!"}
                 )
 
             delta_seconds = datetime.now() - current_token.registered_on
@@ -191,17 +191,17 @@ class Login:
                 )
                 return JSONResponse(
                     status_code=200,
-                    content="Successfully logged in"
+                    content={"message":"Successfully logged in"}
                 )
             else:
                 if delta_seconds >= validation_time_seconds:
                     return JSONResponse(
                         status_code=400,
-                        content="Token expired"
+                        content={"message":"Token expired"}
                     )
                 return JSONResponse(
                     status_code=400,
-                    content="Token is not correct"
+                    content={"message":"Token is not correct"}
                 )
         except Exception as e:
             return str(e)
@@ -214,7 +214,7 @@ class Login:
             ):
                 return JSONResponse(
                     status_code=400,
-                    content=f"Account with email: {change_pass.email} is not registered!"
+                    content={"message":f"Account with email: {change_pass.email} is not registered!"}
                 )
             user = UserDB().get_user(
                 email=change_pass.email
@@ -222,18 +222,18 @@ class Login:
             if user.password != change_pass.old_password:
                 return JSONResponse(
                     status_code=400,
-                    content="Password not correct!"
+                    content={"message":"Password not correct!"}
                 )
 
             if change_pass.new_password != change_pass.confirm_password:
                 return JSONResponse(
                     status_code=400,
-                    content="Passwords are not the same!"
+                    content={"message":"Passwords are not the same!"}
                 )
             if user.password == change_pass.new_password:
                 return JSONResponse(
                     status_code=400,
-                    content="New password is same as previous!"
+                    content={"message":"New password is same as previous!"}
                 )
             new_user = api_models.UserUpdate(first_name=user.first_name, last_name=user.last_name,
                                              password=change_pass.new_password)
@@ -243,7 +243,7 @@ class Login:
             )
             return JSONResponse(
                 status_code=200,
-                content="Password changed successfully!"
+                content={"message":"Password changed successfully!"}
             )
         except Exception as e:
             return str(e)
@@ -263,7 +263,5 @@ class MessageSender:
         s.quit()
         return JSONResponse(
             status_code=200,
-            content={
-                "message": f"Your confirmation code has been sent on {email}"
-            }
+            content={"message": f"Your confirmation code has been sent on {email}"}
         )

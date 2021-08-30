@@ -5,3 +5,5 @@ SQLAlchemy==1.4.23
 starlette==0.14.2
 typing-extensions==3.10.0.0
 uvicorn==0.15.0
+uvloop==0.14.0
+httptools==0.1.*
