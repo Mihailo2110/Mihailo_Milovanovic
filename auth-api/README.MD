@@ -4,8 +4,8 @@
 POST http://localhost:8080/authorizatoin/login
 ```json
 {
-    "username": "mica",
-    "password": "sifra123"
+    "email": "example@example.com",
+    "password": "password"
 }
 ```
 
