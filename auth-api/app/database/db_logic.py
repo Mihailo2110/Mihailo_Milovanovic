@@ -17,6 +17,8 @@ class UserDB:
 
     def create_user(self, user):
         try:
+            if user.password != user.confirm_password:
+                return False
             current_user = db_models.User()
             current_user.email = user.email
             current_user.first_name = user.first_name

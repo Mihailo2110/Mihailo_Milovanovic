@@ -1,5 +1,3 @@
-import secrets
-
 from fastapi import APIRouter
 
 from app.api.logic import UserCRUD, Login, MessageSender
