@@ -64,13 +64,6 @@ async def check_token(token: api_models.CheckToken):
     )
 
 
-@api.post("/set-token")
-async def check_token(email: str):
-    return Login.set_token(
-        email=email
-    )
-
-
 @api.post("/change-password")
 async def change_password(change_pass: api_models.ChangePassword):
     return Login.change_password(

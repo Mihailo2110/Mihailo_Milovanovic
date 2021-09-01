@@ -10,6 +10,8 @@ services:
       - 8080:8080
     networks:
       - mihailo_network
+#    volumes:
+#      -db:db
 networks:
   mihailo_network:
     external: true

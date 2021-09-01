@@ -12,7 +12,7 @@ class UserCreate(BaseModel):
 class UserUpdate(BaseModel):
     first_name: str
     last_name: str
-    password: str
+    password: Optional[str] = None
 
 
 class UserReturn(BaseModel):

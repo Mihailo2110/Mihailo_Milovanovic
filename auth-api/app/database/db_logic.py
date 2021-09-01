@@ -32,7 +32,10 @@ class UserDB:
         current_user = self.db.query(db_models.User).filter(db_models.User.email == email).first()
         setattr(current_user, "first_name", update_user.first_name)
         setattr(current_user, "last_name", update_user.last_name)
-        setattr(current_user, "password", update_user.password)
+        if update_user.password:
+            setattr(current_user, "password", update_user.password)
+        else:
+            setattr(current_user, "password", current_user.password)
         self.db.commit()
         return True
 
