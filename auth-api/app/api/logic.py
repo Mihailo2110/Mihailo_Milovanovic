@@ -141,7 +141,10 @@ class Login:
                 content={"message": f"Login successful, token sent on {email}"}
             )
         except Exception as e:
-            return str(e)
+            return JSONResponse(
+                status_code=500,
+                content={"message": str(e)}
+            )
 
     @staticmethod
     def set_token(email):
@@ -149,7 +152,6 @@ class Login:
             email=email
         )
         new_token = str(secrets.token_hex(2))
-        token = Token(email=email, token=new_token, registered_on=datetime.now())
 
         if not check_token_exists:
             TokenDB().create(
@@ -177,7 +179,6 @@ class Login:
     @staticmethod
     def check_token(token):
         try:
-            validation_time_seconds = timedelta(seconds=600)
             email = getattr(token, "email")
             token = getattr(token, "token")
             current_token = TokenDB().find_by_email(
@@ -189,8 +190,10 @@ class Login:
                     content={"message": "Token doesn't exist!"}
                 )
 
+            validation_time_seconds = timedelta(seconds=600)
             delta_seconds = datetime.now() - current_token.registered_on
-            if (token == current_token.token) & (delta_seconds <= validation_time_seconds):
+
+            if (token == current_token.token) and (delta_seconds <= validation_time_seconds):
                 TokenDB().delete(
                     email=email
                 )
@@ -209,7 +212,10 @@ class Login:
                     content={"message": "Token is not correct"}
                 )
         except Exception as e:
-            return str(e)
+            return JSONResponse(
+                status_code=500,
+                content={"message": str(e)}
+            )
 
     @staticmethod
     def change_password(change_pass):
@@ -251,7 +257,10 @@ class Login:
                 content={"message": "Password changed successfully!"}
             )
         except Exception as e:
-            return str(e)
+            return JSONResponse(
+                status_code=500,
+                content={"message": str(e)}
+            )
 
 
 class MessageSender:
