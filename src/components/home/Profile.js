@@ -23,12 +23,12 @@ function Profile(props) {
     firstname: props.firstname,
     lastname: props.lastname,
     email: props.email,
-    password: props.password
+    // password: props.password
   })
   const [editing, setEditing] = React.useState(false);
 
   useEffect(() => {
-    if (props.firstname === "" && props.lastname === "") {
+    // if (props.firstname === "" && props.lastname === "") {
       axios.get(`http://localhost:8080/authorization/user/` + props.email)
         .then(response => {
           console.log(response.data)
@@ -41,7 +41,7 @@ function Profile(props) {
           })
         })
     }
-  })
+  )
 
   const deleteUser = () => {
     axios.delete(`http://localhost:8080/authorization/user/` + props.email)
@@ -52,7 +52,7 @@ function Profile(props) {
         setAlert({
           status: true,
           type: "danger",
-          msg: err.response.data.message
+          msg: err.response.data.message  
         })
       })
   }
@@ -68,8 +68,8 @@ function Profile(props) {
     console.log(info)
     axios.put(`http://localhost:8080/authorization/user/` + props.email, {
       first_name: info.firstname,
-      last_name: info.lastname,
-      password: info.password
+      last_name: info.lastname
+      // password: info.password
     })
       .then(response => {
         setAlert({
@@ -129,12 +129,6 @@ function Profile(props) {
 
   return (
     <div>
-      {alert.status === true ? <Alert variant={alert.type} className={styles.alert} onClose={() => setAlert({ status: false, msg: "" })} dismissible>
-        <Alert.Heading>{alert.msg}</Alert.Heading>
-        <p>
-          
-        </p>
-      </Alert> : <div></div>}
       <Card className={styles.card} >
         <Card.Body>
           <Card.Title>{props.fullname}</Card.Title>
@@ -150,13 +144,19 @@ function Profile(props) {
           <Button variant="outline-primary" className={styles.btn} onClick={() => setShow(true)}>Change Password</Button>
 
           <Modal show={show} onHide={() => setShow(false)}>
+          {alert.status === true ? <Alert variant={alert.type} className={styles.alert} onClose={() => setAlert({ status: false, msg: "" })} dismissible>
+        <Alert.Heading>{alert.msg}</Alert.Heading>
+        <p>
+          
+        </p>
+      </Alert> : <div></div>}
             <Modal.Header closeButton>
               <Modal.Title>Change Password:</Modal.Title>
             </Modal.Header>
             <Modal.Body>
               <Form.Label sm="3"  >Current Password:</Form.Label>
               <br />
-              <Form.Control id="oldPwd" type="text" className={styles.input} onChange={handlePwdChange} />
+              <Form.Control id="oldPwd" column sm="3" type="password" className={styles.input} onChange={handlePwdChange} />
               <Form.Label>New Password:</Form.Label>
               <br />
               <Form.Control id="newPwd" column sm="3" type="password" className={styles.input} onChange={handlePwdChange} />

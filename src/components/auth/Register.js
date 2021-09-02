@@ -15,6 +15,7 @@ function Register(props) {
         firstname: "",
         lastname: "",
         email: "",
+        confirmpassword: ""
     })
     const [show, setShow] = React.useState({
         status: false,
@@ -23,16 +24,16 @@ function Register(props) {
     });
 
     const onCredChange = (event) => {
-        if(event.target.id !== "confirmpassword"){
+        // if(event.target.id !== "confirmpassword"){
             setCredential({...credential,
                 [event.target.id]: event.target.value});
-        }
+        // }
 
     }
 
     const onRegister = () => {
         axios.post(`http://localhost:8080/authorization/user`, {first_name: credential.firstname, 
-            last_name: credential.lastname, email: credential.email, password: credential.password })
+            last_name: credential.lastname, email: credential.email, password: credential.password, confirm_password: credential.confirmpassword})
         .then(response => {
             setShow({
                 status: true,
@@ -41,6 +42,7 @@ function Register(props) {
             })
             history.push("/");
         }).catch(err => {
+            console.log(credential)
             setShow({
                 status: true,
                 msg: err.response.data.message,
